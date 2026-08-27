@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shriekd — TikTok Authorization</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0c0c0c;
+      color: #ffffff;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    h1 {
+      font-family: Impact, sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.12em;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+    h1 span { color: #cc0000; }
+    .box {
+      margin-top: 32px;
+      background: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 28px 32px;
+      max-width: 560px;
+      width: 100%;
+      text-align: center;
+    }
+    .label {
+      font-size: 12px;
+      color: #888;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .code-box {
+      background: #0c0c0c;
+      border: 1px solid #cc0000;
+      border-radius: 4px;
+      padding: 14px 16px;
+      font-family: monospace;
+      font-size: 13px;
+      color: #cc0000;
+      word-break: break-all;
+      text-align: left;
+      margin-bottom: 16px;
+      min-height: 48px;
+    }
+    .copy-btn {
+      background: #cc0000;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+    }
+    .copy-btn:hover { opacity: 0.85; }
+    .instructions {
+      margin-top: 24px;
+      font-size: 13px;
+      color: #666;
+      line-height: 1.7;
+    }
+    .success { color: #44cc44; font-size: 13px; margin-top: 10px; display: none; }
+    .error-box { color: #ff6666; margin-top: 16px; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <h1>SHRIEK<span>D</span></h1>
+
+  <div class="box">
+    <div class="label">Your Authorization Code</div>
+    <div class="code-box" id="code-display">Checking URL...</div>
+    <button class="copy-btn" onclick="copyCode()">Copy Code</button>
+    <div class="success" id="success-msg">Copied to clipboard!</div>
+    <div class="instructions">
+      Copy this code and paste it into your terminal when the script asks for it.
+    </div>
+    <div class="error-box" id="error-msg"></div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const code   = params.get("code");
+    const error  = params.get("error");
+
+    if (code) {
+      document.getElementById("code-display").textContent = code;
+    } else if (error) {
+      document.getElementById("code-display").textContent = "Authorization failed.";
+      document.getElementById("error-msg").textContent = "Error: " + error;
+    } else {
+      document.getElementById("code-display").textContent = "No code found in URL.";
+    }
+
+    function copyCode() {
+      const code = document.getElementById("code-display").textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        document.getElementById("success-msg").style.display = "block";
+        setTimeout(() => document.getElementById("success-msg").style.display = "none", 2000);
+      });
+    }
+  </script>
+</body>
+</html>
